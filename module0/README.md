@@ -1,6 +1,6 @@
 0.4: uusi muistiinpano
  
-   sequenceDiagram
+   ```sequenceDiagram
         participant browser
         participant server
 
@@ -29,6 +29,8 @@
         browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note  
         server-->>browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
         deactivate server  
+   ```
+
 
 
 0.5: Single Page App
