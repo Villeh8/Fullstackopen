@@ -54,7 +54,7 @@
     server-->>browser: [{content: ".", date: "2023-02-08T06:46:04.971Z"},…]
     deactivate server    
   ```
-0.6 Uusi muistiinpano
+0.6: Uusi muistiinpano
  ```sequenceDiagram
     participant browser
     participant server
