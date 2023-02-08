@@ -54,3 +54,10 @@
     server-->>browser: [{content: ".", date: "2023-02-08T06:46:04.971Z"},…]
     deactivate server    
   ```
+0.6
+ ```sequenceDiagram
+    participant browser
+    participant server
+    
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+ ```
