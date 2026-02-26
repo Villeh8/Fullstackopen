@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import personService from './services/persons'
+
 
 const Filter = ({ filter, handleFilterChange }) => (
   <div>
@@ -12,7 +14,8 @@ const PersonForm = ({
   newName,
   handleNameChange,
   newNumber,
-  handleNumberChange
+  handleNumberChange,
+  handleNewNumber
 }) => (
   <form onSubmit={addPerson}>
     <div>
@@ -29,27 +32,33 @@ const PersonForm = ({
   </form>
 )
 
-const Persons = ({ persons }) => (
+const Persons = ({ persons, handleDelete }) => (
   <div>
     {persons.map(person => (
-      <p key={person.name}>
+      <p key={person.id}>
         {person.name} {person.number}
+        <button onClick={() => handleDelete(person.id, person.name)}>
+          delete
+        </button>
       </p>
     ))}
   </div>
 )
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState([])
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+
+  useEffect(() => {
+    personService
+      .getAll()
+        .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+  }, [])
 
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
@@ -58,20 +67,68 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    const nameExists = persons.some(person => person.name === newName)
-    if (nameExists) {
-      alert(`${newName} is already added to phonebook`)
+    const existingPerson = persons.find(
+      person => person.name === newName
+    )
+
+    if (existingPerson) {
+      const confirmNumberChange = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      )
+
+      if (!confirmNumberChange) {
+        return
+      }
+
+      const changedPerson = {
+        ...existingPerson,
+        number: newNumber
+      }
+
+      personService
+        .update(existingPerson.id, changedPerson)
+        .then(returnedPerson => {
+          setPersons(persons.map(p=> 
+            p.id !== existingPerson.id ? p : returnedPerson
+          ))
+          setNewName('')
+          setNewNumber('')
+      })
       return
     }
 
-    setPersons(persons.concat({ name: newName, number: newNumber }))
-    setNewName('')
-    setNewNumber('')
+    const newPerson = {
+      name: newName,
+      number: newNumber
+    }
+    personService
+      .create(newPerson)
+        .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   )
+
+  const handleDelete = (id, name) => {
+    const confirmDelete = window.confirm(
+      `Delete ${name}?`
+    )
+
+    if (!confirmDelete) {
+      return
+    }
+
+    personService
+      .remove(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+    })
+  }
 
   return (
     <div>
@@ -91,7 +148,11 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons persons={personsToShow} />
+      <Persons 
+        persons={personsToShow}
+        handleDelete={handleDelete}
+      />
+
     </div>
   )
 }
