@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": "2"
-    },
-    {
       "name": "Dan Abramov",
       "number": "12-43-234345",
       "id": "3"
@@ -16,14 +11,24 @@
       "id": "4"
     },
     {
-      "id": "db7c",
-      "name": "sami",
-      "number": "15"
-    },
-    {
       "id": "d161",
       "name": "kimmo",
       "number": "23"
+    },
+    {
+      "name": "Sas",
+      "number": "13",
+      "id": "9d99YlB"
+    },
+    {
+      "name": "asa",
+      "number": "12",
+      "id": "XK9oBc7"
+    },
+    {
+      "name": "Sami",
+      "number": "17",
+      "id": "87KMTuV"
     }
   ]
 }
