@@ -1,0 +1,36 @@
+
+GET http://localhost:3001/api/persons
+
+###
+
+DELETE http://localhost:3001/api/persons/2
+
+###
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Pasi Virtanen",
+  "number": "040-1234567"
+}
+
+###
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Arto Hellas",
+  "number": "999-999999"
+}
+
+###
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Juha Sukunimi",
+  "number": "999-999999"
+}
